@@ -37,6 +37,7 @@ import System.IO
 import Data.List
 import Data.Char
 #+end_src
+
 * Game utilities:
 
 ** next function:
@@ -46,6 +47,7 @@ next :: Int -> Int
 next 1 = 2
 next 2 = 1
 #+end_src
+
 ** Board
 Show each row as a list.
 #+begin_src haskell
@@ -64,6 +66,7 @@ A move in the game is specified by a row number and the number of stars to be re
 valid :: Board -> Int -> Int -> Bool
 valid board row num = board !! (row-1) >=num
 #+end_src
+
 ** move
 If valid then do the move.
 #+begin_src haskell
@@ -85,6 +88,7 @@ putRow row num = do putStr (show row)
                     putStr ": "
                     putStrLn (concat (replicate num "✦ "))
 #+end_src
+
 ** putBoard function
 We can use `putRow` to show the board.
 #+begin_src haskell
@@ -95,6 +99,7 @@ putBoard [a,b,c,d,e] = do putRow 1 a
                           putRow 4 d
                           putRow 5 e
 #+end_src
+
 ** getDigit function
 A function that displays a prompt and reads single character from the keyboard, if the character is digit, the corresponding integer is returned as the result value, otherwise an error message is displayed and the user prompted to enter a digit again.
 #+begin_src haskell
@@ -108,6 +113,7 @@ getDigit prompt = do putStr prompt
                         do putStrLn "ERROR: Invalid digit"
                            getDigit prompt
 #+end_src
+
 ** newLine function
 Move onto new line.
 #+begin_src haskell
@@ -140,6 +146,7 @@ play board player =
                  putStrLn "ERROR: Invalid move"
                  play board player
 #+end_src
+
 * Invoking game loop
 #+begin_src haskell
 nim :: IO ()

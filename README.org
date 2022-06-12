@@ -24,11 +24,11 @@
 * Nim game:
 A variant of game of name, played on a board comprising five numbered rows of stars initially set up as follows:
 
-    1:✦✦✦✦✦
-    2:✦✦✦✦
-    3:✦✦✦
-    4:✦✦
-    4:✦
+    - 1:✦✦✦✦✦
+    - 2:✦✦✦✦
+    - 3:✦✦✦
+    - 4:✦✦
+    - 4:✦
 
 Two player in bottom-up manner, two players taking turns to remove one or more stars form the end of single row. The winner is who removes the final star.
 * Imports

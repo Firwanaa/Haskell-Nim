@@ -15,7 +15,11 @@
   - [[#move][move]]
 - [[#io-utilities][IO utilities]]
   - [[#putrow-function][putRow function]]
-  - [[#putboard][putBoard]]
+  - [[#putboard-function][putBoard function]]
+  - [[#getdigit-function][getDigit function]]
+  - [[#newline-function][newLine function]]
+- [[#game-of-nim][Game of Nim:]]
+- [[#invoking-game-loop][Invoking game loop]]
 
 * Nim game:
 A variant of game of name, played on a board comprising five numbered rows of stars initially set up as follows:
@@ -31,6 +35,7 @@ Two player in bottom-up manner, two players taking turns to remove one or more s
 #+begin_src haskell
 import System.IO
 import Data.List
+import Data.Char
 #+end_src
 * Game utilities:
 
@@ -80,7 +85,7 @@ putRow row num = do putStr (show row)
                     putStr ": "
                     putStrLn (concat (replicate num "✦ "))
 #+end_src
-** putBoard
+** putBoard function
 We can use `putRow` to show the board.
 #+begin_src haskell
 putBoard :: Board -> IO ()
@@ -89,4 +94,54 @@ putBoard [a,b,c,d,e] = do putRow 1 a
                           putRow 3 c
                           putRow 4 d
                           putRow 5 e
+#+end_src
+** getDigit function
+A function that displays a prompt and reads single character from the keyboard, if the character is digit, the corresponding integer is returned as the result value, otherwise an error message is displayed and the user prompted to enter a digit again.
+#+begin_src haskell
+getDigit :: String -> IO Int
+getDigit prompt = do putStr prompt
+                     x <- getChar
+                     newline
+                     if isDigit x then
+                        return (digitToInt x)
+                     else
+                        do putStrLn "ERROR: Invalid digit"
+                           getDigit prompt
+#+end_src
+** newLine function
+Move onto new line.
+#+begin_src haskell
+newline :: IO ()
+newline = putChar '\n'
+#+end_src
+
+* Game of Nim:
+Using above utilities, we can implement the main game loop.
+#+begin_src haskell
+play :: Board -> Int -> IO ()
+play board player =
+  do newline
+     putBoard board
+     if finished board then
+        do newline
+           putStr "Player "
+           putStr (show (next player))
+           putStrLn " wins!!"
+     else
+        do newline
+           putStr "Player "
+           putStrLn (show player)
+           row <- getDigit "Enter a row number: "
+           num <- getDigit "Stars to remove : "
+           if valid board row num then
+              play (move board row num) (next player)
+           else
+              do newline
+                 putStrLn "ERROR: Invalid move"
+                 play board player
+#+end_src
+* Invoking game loop
+#+begin_src haskell
+nim :: IO ()
+nim = play initial 1
 #+end_src

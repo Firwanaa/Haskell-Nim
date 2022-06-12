@@ -1,5 +1,6 @@
 import System.IO
 import Data.List
+import Data.Char
 
 next :: Int -> Int
 next 1 = 2
@@ -35,3 +36,41 @@ putBoard [a,b,c,d,e] = do putRow 1 a
                           putRow 3 c
                           putRow 4 d
                           putRow 5 e
+
+getDigit :: String -> IO Int
+getDigit prompt = do putStr prompt
+                     x <- getChar
+                     newline
+                     if isDigit x then
+                        return (digitToInt x)
+                     else
+                        do putStrLn "ERROR: Invalid digit"
+                           getDigit prompt
+
+newline :: IO ()
+newline = putChar '\n'
+
+play :: Board -> Int -> IO ()
+play board player =
+  do newline
+     putBoard board
+     if finished board then
+        do newline
+           putStr "Player "
+           putStr (show (next player))
+           putStrLn " wins!!"
+     else
+        do newline
+           putStr "Player "
+           putStrLn (show player)
+           row <- getDigit "Enter a row number: "
+           num <- getDigit "Stars to remove : "
+           if valid board row num then
+              play (move board row num) (next player)
+           else
+              do newline
+                 putStrLn "ERROR: Invalid move"
+                 play board player
+
+nim :: IO ()
+nim = play initial 1
